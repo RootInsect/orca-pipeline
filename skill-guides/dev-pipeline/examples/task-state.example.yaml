@@ -1,0 +1,36 @@
+# Tiny task-state format for the thin layer (not Orca orchestration state).
+id: task_20261011_001
+source: manual
+type: bug_fix
+type_hint: bug_fix
+template_id: bugfix-v1
+title: 登录按钮无响应
+body: |
+  点击登录无反应；控制台有 TypeError。
+repo: owner/name
+project_id: owner__name
+base_ref: main
+domain_tags: [auth, ui]
+priority: normal
+status: active # queued | active | blocked | done | failed
+stage: plan # classify | setup_env | clarify | plan | develop | test | review | open_pr | cicd | experience | done
+ci_loops: 0
+max_ci_loops: 2
+pr_url: null
+orca:
+  worktree_id: null # e.g. repo-123::/path/to/worktree
+  run_id: null
+  gate_ids: []
+  develop_agent: codex
+  review_agent: claude
+agent_overrides: {}
+notes:
+  - "skip clarify: repro steps provided by requester"
+artifacts:
+  - kind: plan
+    uri: artifacts/task_20261011_001/plan.md
+experience:
+  root_env: PIPELINE_EXPERIENCE_ROOT
+  written: []
+created_at: 2026-10-11T03:00:00Z
+updated_at: 2026-10-11T03:30:00Z

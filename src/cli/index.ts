@@ -44,7 +44,9 @@ function shouldIgnoreRemoteSelection(commandPath: string[]): boolean {
     commandPath[0] === 'agent' ||
     commandPath[0] === 'vm' ||
     commandPath[0] === 'agent-context' ||
-    commandPath[0] === 'profile'
+    commandPath[0] === 'profile' ||
+    // Why: pipeline task YAML + experience live on this host; orchestration calls shell out.
+    commandPath[0] === 'pipeline'
   )
 }
 

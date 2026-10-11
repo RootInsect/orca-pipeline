@@ -20,6 +20,24 @@
       ]
     },
     {
+      "name": "dev-pipeline",
+      "sourcePath": "skills/dev-pipeline",
+      "releaseRevision": 1,
+      "packageDigest": "26b544f6e619b856e6d45fb1121f5d7443575800b98bc8a5ebdb3f1988d71a9e",
+      "gitTreeSha": "ac19c7d13465c9e06ecfcfa41f68f717ca3a4977",
+      "files": [
+        {
+          "path": "SKILL.md",
+          "size": 3505,
+          "executable": false,
+          "classification": "text",
+          "exactSha256": "bb39556b0b8cd16e04472bcb5a62b258512556dea53251b1de7a02cde61767e8",
+          "textNormalizedSha256": "bb39556b0b8cd16e04472bcb5a62b258512556dea53251b1de7a02cde61767e8",
+          "identitySha256": "bb39556b0b8cd16e04472bcb5a62b258512556dea53251b1de7a02cde61767e8"
+        }
+      ]
+    },
+    {
       "name": "linear-tickets",
       "sourcePath": "skills/linear-tickets",
       "releaseRevision": 11,
