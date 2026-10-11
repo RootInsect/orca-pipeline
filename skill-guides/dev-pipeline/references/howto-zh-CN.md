@@ -109,8 +109,22 @@ orca-dev skills get dev-pipeline
 orca-dev skills get dev-pipeline --reference references/demo-bugfix.md
 ```
 
+## 7. 桌面 UI（Orca 侧栏「流水线 / Pipeline」）
+
+在本 fork 的 Orca 桌面应用里：
+
+1. 左侧栏点 **流水线 / Pipeline**（在 Search / Tasks 附近；可用右键隐藏，设置项 `showPipelineButton`）。
+2. **任务列表**：默认按项目折叠分组；行上显示状态点（进行中 / 需要我 / 阻塞 / 完成）、标题、类型、阶段、角色·Agent、阻塞或耗时、worktree、PR。
+3. **顶栏筛选**：分组切换「项目 / Agent / 状态」；项目·Agent·类型·阶段下拉；「只看需要我」。
+4. **发布任务**：点「发布任务」→ 填标题/描述/仓库（从已注册 repo 选）/类型（可自动分类）/领域标签 → 提交，走与 CLI `pipeline create` 同一套逻辑。
+5. **详情**：点一行打开时间线（setup_env → … → experience）、门禁内联回复（等同 `pipeline unblock`）、worktree/PR/CI/经验路径。
+6. **调度器**：页内可启动/停止/单步；角色→Agent（含 `cursor-agent`）写入同一份 `~/.pipeline/config.yaml`。若 PATH 上只有 `cursor-agent`，Developer / Reviewer / Planner 默认用它。
+7. 数据经主进程 IPC 读 `~/.pipeline/tasks/`，文件 watch + 轮询刷新。
+
+CLI 与 UI 共用同一任务目录与配置，可混用。
+
 ## 范围外（本 MVP）
 
 - 上千任务的多机舰队
 - 完整 MCP `create_task` 服务（可后接）
-- Electron / 手机列表 UI（CLI status 足够）
+- 手机端流水线列表

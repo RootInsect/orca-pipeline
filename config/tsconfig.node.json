@@ -10,6 +10,7 @@
     "./scripts/vitest-bun-node-builtins.ts",
     "./scripts/vitest-node-runtime-pool.ts",
     "../src/main/**/*",
+    "../src/cli/pipeline/**/*",
     "../src/renderer/src/lib/skill-freshness-display-status.ts",
     "../src/renderer/src/components/native-chat/native-chat-resolution-receipt.ts",
     "../src/renderer/src/components/native-chat/structured-agent-question-projection.ts",

@@ -34,6 +34,19 @@ export function createUiViewActions(set: UISliceSet, get: UISliceGet): Partial<U
         activeView: state.previousViewBeforeAutomations,
         worktreeNavHistoryIndex: rewindHistoryIndexPastView(state, 'automations')
       })),
+    openPipelinePage: () => {
+      get().recordViewVisit('pipeline')
+      set((state) => ({
+        activeView: 'pipeline',
+        previousViewBeforePipeline:
+          state.activeView === 'pipeline' ? state.previousViewBeforePipeline : state.activeView
+      }))
+    },
+    closePipelinePage: () =>
+      set((state) => ({
+        activeView: state.previousViewBeforePipeline,
+        worktreeNavHistoryIndex: rewindHistoryIndexPastView(state, 'pipeline')
+      })),
     openSpacePage: () => {
       get().recordFeatureInteraction?.('workspace-cleanup')
       set((state) => ({

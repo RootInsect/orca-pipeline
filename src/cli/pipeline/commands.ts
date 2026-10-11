@@ -114,6 +114,10 @@ export async function cmdConfigSet(io: CommandIo, key: string, value: string): P
     case 'Orchestrator':
       next.agents.Orchestrator = value
       break
+    case 'agents.Writer':
+    case 'Writer':
+      next.agents.Writer = value
+      break
     default:
       throw new Error(`Unsupported config key: ${key}`)
   }

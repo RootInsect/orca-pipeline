@@ -2,6 +2,11 @@ import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import { parse, stringify } from 'yaml'
 import {
+  defaultAgentsForAvailable,
+  ensureCursorAgentAllowed,
+  listPipelineAgentsOnPath
+} from './agent-availability'
+import {
   defaultConfigPath,
   defaultExperienceRoot,
   defaultPipelineHome,
@@ -11,17 +16,10 @@ import {
 import { asNumber, asString, asStringArray, errnoCode, isRecord } from './parse-helpers'
 import type { PipelineConfig, PipelineRole } from './types'
 
-const DEFAULT_AGENTS: Record<PipelineRole, string> = {
-  Orchestrator: 'claude',
-  Planner: 'claude',
-  Developer: 'codex',
-  Reviewer: 'claude',
-  Writer: 'claude'
-}
-
 const ROLE_LIST: PipelineRole[] = ['Orchestrator', 'Planner', 'Developer', 'Reviewer', 'Writer']
 
 export function defaultPipelineConfig(): PipelineConfig {
+  const available = listPipelineAgentsOnPath()
   return {
     tasks_dir: process.env.PIPELINE_TASKS_DIR?.trim() || defaultTasksDir(),
     experience_root: defaultExperienceRoot(),
@@ -32,7 +30,7 @@ export function defaultPipelineConfig(): PipelineConfig {
     dry_run: process.env.PIPELINE_DRY_RUN === '1',
     poll_interval_ms: 5000,
     worker_wait_timeout_ms: 900_000,
-    agents: { ...DEFAULT_AGENTS },
+    agents: ensureCursorAgentAllowed(defaultAgentsForAvailable(available)),
     auto_skip_clarify_keywords: ['repro', 'reproduce', '复现', 'steps to reproduce', 'typeerror']
   }
 }
@@ -70,7 +68,7 @@ export function normalizePipelineConfig(raw: unknown): PipelineConfig {
     dry_run: asBoolean(raw.dry_run, base.dry_run) || process.env.PIPELINE_DRY_RUN === '1',
     poll_interval_ms: asNumber(raw.poll_interval_ms, base.poll_interval_ms),
     worker_wait_timeout_ms: asNumber(raw.worker_wait_timeout_ms, base.worker_wait_timeout_ms),
-    agents,
+    agents: ensureCursorAgentAllowed(agents),
     auto_skip_clarify_keywords: Array.isArray(raw.auto_skip_clarify_keywords)
       ? asStringArray(raw.auto_skip_clarify_keywords)
       : base.auto_skip_clarify_keywords
