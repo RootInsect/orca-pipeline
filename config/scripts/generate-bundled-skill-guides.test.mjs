@@ -28,6 +28,7 @@ const GUIDE_REFERENCES = {
   'dev-pipeline': [
     'demo-bugfix.md',
     'experience-store.md',
+    'howto-zh-CN.md',
     'orca-wiring.md',
     'roles-and-routing.md',
     'task-types.md',

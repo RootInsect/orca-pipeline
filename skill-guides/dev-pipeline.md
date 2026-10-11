@@ -90,20 +90,29 @@ Scaffold: `skill-guides/dev-pipeline/scripts/experience-init.sh`.
 Schema and read/write timing:
 `ORCA skills get dev-pipeline --reference references/experience-store.md`.
 
+## Runnable CLI (product loop)
+
+```text
+ORCA pipeline init
+ORCA pipeline create --type bug_fix --title "…" --repo owner/name --body "repro: …"
+ORCA pipeline run
+ORCA pipeline list
+ORCA pipeline status --task <id>
+```
+
+Config role accounts once (`Developer` / `Reviewer`); the scheduler auto-picks
+them per stage. CI uses `gh` polling (not a webhook). Experience writes to
+`~/.pipeline/experience/`.
+
+Operator HOWTO (Chinese):
+`ORCA skills get dev-pipeline --reference references/howto-zh-CN.md`.
+
 ## Task state
 
 Example file:
 `skill-guides/dev-pipeline/examples/task-state.example.yaml`.
 
-Helpers (optional, local files only):
-
-```text
-skill-guides/dev-pipeline/scripts/task-create.sh --type bug_fix --title "…" --repo owner/name
-skill-guides/dev-pipeline/scripts/task-advance.sh --task <path-or-id> --to plan
-```
-
-These scripts write YAML under a chosen tasks dir; they do **not** replace Orca
-orchestration state.
+Default store: `~/.pipeline/tasks/*.yaml` (override with `PIPELINE_TASKS_DIR`).
 
 ## Demo (修 Bug happy path)
 
@@ -122,5 +131,6 @@ orchestration state.
 | Concrete Orca CLI mapping | `references/orca-wiring.md` |
 | Role / cost routing | `references/roles-and-routing.md` |
 | Shared experience layout | `references/experience-store.md` |
+| Chinese operator HOWTO | `references/howto-zh-CN.md` |
 | End-to-end bug_fix demo | `references/demo-bugfix.md` |
 | Rebase/merge stablyai/orca into this fork | `references/upstream-merge.md` |
