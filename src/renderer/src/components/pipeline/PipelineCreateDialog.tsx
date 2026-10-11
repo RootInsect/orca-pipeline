@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
-import { taskTypeLabel } from './pipeline-display'
+import { isPipelineTaskType, taskTypeLabel } from './pipeline-display'
 import type { PipelineCreateInput, PipelineTaskType } from '../../../../shared/pipeline-ui-types'
 
 const TYPE_OPTIONS: (PipelineTaskType | 'auto')[] = [
@@ -114,7 +114,12 @@ export function PipelineCreateDialog({
             <select
               className="h-9 rounded-md border border-border bg-background px-3 text-sm"
               value={typeHint}
-              onChange={(event) => setTypeHint(event.target.value as PipelineTaskType | 'auto')}
+              onChange={(event) => {
+                const value = event.target.value
+                if (value === 'auto' || isPipelineTaskType(value)) {
+                  setTypeHint(value)
+                }
+              }}
             >
               {TYPE_OPTIONS.map((type) => (
                 <option key={type} value={type}>

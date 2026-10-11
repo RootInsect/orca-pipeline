@@ -4,10 +4,10 @@ import { projectKey } from './pipeline-display'
 
 export type PipelineGroupBy = 'project' | 'agent' | 'status'
 export type PipelineFilters = {
-  project: string | 'all'
-  agent: string | 'all'
-  type: string | 'all'
-  stage: string | 'all'
+  project: string
+  agent: string
+  type: string
+  stage: string
   onlyNeedsMe: boolean
 }
 

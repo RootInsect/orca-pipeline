@@ -3,7 +3,6 @@ import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { taskTypeLabel } from './pipeline-display'
 import type { PipelineFilters, PipelineGroupBy } from './pipeline-grouping'
-import type { PipelineTaskType } from '../../../../shared/pipeline-ui-types'
 
 function Chip({
   active,
@@ -114,7 +113,7 @@ export function PipelineFiltersBar({
           </option>
           {options.types.map((type) => (
             <option key={type} value={type}>
-              {taskTypeLabel(type as PipelineTaskType)}
+              {taskTypeLabel(type)}
             </option>
           ))}
         </select>

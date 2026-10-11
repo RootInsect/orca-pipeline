@@ -115,7 +115,8 @@ export class PipelineHostService {
       ...config,
       agents: { ...config.agents }
     }
-    for (const role of Object.keys(patch.agents) as PipelineRole[]) {
+    const roles: PipelineRole[] = ['Orchestrator', 'Planner', 'Developer', 'Reviewer', 'Writer']
+    for (const role of roles) {
       const value = patch.agents[role]
       if (typeof value === 'string' && value.trim()) {
         next.agents[role] = value.trim()

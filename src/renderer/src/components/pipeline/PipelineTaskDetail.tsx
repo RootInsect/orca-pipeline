@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { ExternalLink } from 'lucide-react'
-import type { PipelineTaskDto } from '../../../../shared/pipeline-ui-types'
+import type { PipelineStage, PipelineTaskDto } from '../../../../shared/pipeline-ui-types'
 import { PIPELINE_TIMELINE_STAGES } from '../../../../shared/pipeline-ui-types'
 import { translate } from '@/i18n/i18n'
 import { Button } from '@/components/ui/button'
@@ -8,13 +8,16 @@ import { Textarea } from '@/components/ui/textarea'
 import { cn } from '@/lib/utils'
 import { needsHuman, taskTypeLabel } from './pipeline-display'
 
-function stageState(task: PipelineTaskDto, stage: string): 'done' | 'current' | 'pending' {
+function timelineIndex(stage: PipelineStage): number {
+  return PIPELINE_TIMELINE_STAGES.indexOf(stage)
+}
+
+function stageState(task: PipelineTaskDto, stage: PipelineStage): 'done' | 'current' | 'pending' {
   if (task.stage === 'done' || task.status === 'done') {
     return 'done'
   }
-  const order = PIPELINE_TIMELINE_STAGES
-  const currentIdx = order.indexOf(task.stage as (typeof order)[number])
-  const stageIdx = order.indexOf(stage as (typeof order)[number])
+  const currentIdx = timelineIndex(task.stage)
+  const stageIdx = timelineIndex(stage)
   if (stageIdx === -1 || currentIdx === -1) {
     return stage === task.stage ? 'current' : 'pending'
   }

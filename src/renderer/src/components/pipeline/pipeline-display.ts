@@ -7,7 +7,16 @@ import type {
 import { pipelineTaskStatusDot } from '../../../../shared/pipeline-ui-types'
 import { translate } from '@/i18n/i18n'
 
-export function taskTypeLabel(type: PipelineTaskType): string {
+const TASK_TYPES: readonly PipelineTaskType[] = ['bug_fix', 'new_feature', 'debug', 'small_change']
+
+export function isPipelineTaskType(value: string): value is PipelineTaskType {
+  return TASK_TYPES.some((type) => type === value)
+}
+
+export function taskTypeLabel(type: string): string {
+  if (!isPipelineTaskType(type)) {
+    return type
+  }
   switch (type) {
     case 'bug_fix':
       return translate('auto.components.pipeline.type.bug_fix', '修 Bug')

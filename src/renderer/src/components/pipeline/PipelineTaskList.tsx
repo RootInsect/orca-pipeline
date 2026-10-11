@@ -1,14 +1,16 @@
 import { useState } from 'react'
 import { ChevronDown, ChevronRight } from 'lucide-react'
-import type { PipelineTaskDto } from '../../../../shared/pipeline-ui-types'
+import type { PipelineTaskDto, PipelineUiStatusDot } from '../../../../shared/pipeline-ui-types'
 import { translate } from '@/i18n/i18n'
 import { statusDotLabel } from './pipeline-display'
-import type { PipelineUiStatusDot } from '../../../../shared/pipeline-ui-types'
 import { PipelineTaskRow } from './PipelineTaskRow'
 
+const STATUS_DOTS: readonly PipelineUiStatusDot[] = ['running', 'waiting_on_me', 'blocked', 'done']
+
 function groupLabel(key: string): string {
-  if (key === 'running' || key === 'waiting_on_me' || key === 'blocked' || key === 'done') {
-    return statusDotLabel(key as PipelineUiStatusDot)
+  const statusDot = STATUS_DOTS.find((dot) => dot === key)
+  if (statusDot) {
+    return statusDotLabel(statusDot)
   }
   return key
 }

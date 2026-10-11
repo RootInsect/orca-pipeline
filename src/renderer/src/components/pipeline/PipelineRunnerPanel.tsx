@@ -1,8 +1,8 @@
 import type {
   PipelineConfigDto,
+  PipelineRole,
   PipelineSchedulerState
 } from '../../../../shared/pipeline-ui-types'
-import type { PipelineRole } from '../../../../shared/pipeline-ui-types'
 import { translate } from '@/i18n/i18n'
 import { Button } from '@/components/ui/button'
 

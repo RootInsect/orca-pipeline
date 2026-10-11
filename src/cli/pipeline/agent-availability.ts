@@ -67,8 +67,8 @@ export function listPipelineAgentsOnPath(
 export function defaultAgentsForAvailable(
   available: readonly string[]
 ): Record<PipelineRole, string> {
-  const known = available.filter((agent) =>
-    (PIPELINE_AGENT_OPTIONS as readonly string[]).includes(agent)
+  const known = available.filter((agent): agent is PipelineAgentOption =>
+    PIPELINE_AGENT_OPTIONS.some((option) => option === agent)
   )
   if (known.length === 1 && known[0] === 'cursor-agent') {
     return {
@@ -80,7 +80,7 @@ export function defaultAgentsForAvailable(
     }
   }
 
-  const pick = (...prefs: string[]): string => {
+  const pick = (...prefs: PipelineAgentOption[]): string => {
     for (const pref of prefs) {
       if (known.includes(pref)) {
         return pref
