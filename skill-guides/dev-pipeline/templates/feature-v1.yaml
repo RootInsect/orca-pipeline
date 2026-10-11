@@ -1,0 +1,77 @@
+id: feature-v1
+task_types: [new_feature]
+max_ci_loops: 2
+summary: Clarify acceptance → design sketch → implement → acceptance tests → PR → CI → experience
+stages:
+  - name: setup_env
+    role: Orchestrator
+    skills: [env-setup]
+    human_gate: false
+    exit_when: worktree ready and env ok (or noted fallback)
+    on_fail: retry
+    agent_preference: { capability: env, cost: low }
+
+  - name: clarify
+    role: Orchestrator
+    skills: [clarify-requirements]
+    human_gate: true
+    skip_when: null
+    exit_when: AcceptanceCriteria non-empty and confirmed
+    on_fail: escalate
+    agent_preference: { capability: clarify, cost: mid }
+
+  - name: plan
+    role: Planner
+    skills: [design-sketch]
+    human_gate: true
+    exit_when: PlanDoc with risks and test points; experience summary injected
+    on_fail: retry
+    agent_preference: { capability: plan, cost: high }
+
+  - name: develop
+    role: Developer
+    skills: [implement]
+    human_gate: false
+    exit_when: feature change set complete for agreed scope
+    on_fail: retry
+    agent_preference: { capability: code, cost: mid }
+
+  - name: test
+    role: Developer
+    skills: [acceptance-test]
+    human_gate: false
+    exit_when: acceptance-related tests green
+    on_fail: goto:develop
+    agent_preference: { capability: test, cost: low }
+
+  - name: review
+    role: Reviewer
+    skills: [review-checklist]
+    human_gate: false
+    exit_when: review approve (prefer isolated account)
+    on_fail: goto:develop
+    agent_preference: { capability: review, cost: mid }
+
+  - name: open_pr
+    role: Developer
+    skills: [open-pr]
+    human_gate: false
+    exit_when: pr_url written
+    on_fail: retry
+    agent_preference: { capability: code, cost: low }
+
+  - name: cicd
+    role: Orchestrator
+    skills: [ci-loop]
+    human_gate: false
+    exit_when: CI green or blocked at max_ci_loops
+    on_fail: goto:develop
+    agent_preference: { capability: classify, cost: mid }
+
+  - name: experience
+    role: Writer
+    skills: [experience-write]
+    human_gate: false
+    exit_when: ambiguity / module-boundary notes written to shared experience root
+    on_fail: escalate
+    agent_preference: { capability: write, cost: low }

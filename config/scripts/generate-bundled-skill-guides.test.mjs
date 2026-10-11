@@ -25,6 +25,15 @@ const projectDir = path.resolve(import.meta.dirname, '..', '..')
 const temporaryDirectories = []
 const execFileAsync = promisify(execFile)
 const GUIDE_REFERENCES = {
+  'dev-pipeline': [
+    'demo-bugfix.md',
+    'experience-store.md',
+    'orca-wiring.md',
+    'roles-and-routing.md',
+    'task-types.md',
+    'templates.md',
+    'upstream-merge.md'
+  ],
   orchestration: [
     'coordinator-loop.md',
     'legacy-contract-migration.md',

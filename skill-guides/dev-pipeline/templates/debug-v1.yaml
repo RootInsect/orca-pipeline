@@ -1,0 +1,79 @@
+id: debug-v1
+task_types: [debug]
+max_ci_loops: 2
+summary: Expectation vs actual → hypotheses → probes → fix OR evidence conclusion
+stages:
+  - name: setup_env
+    role: Orchestrator
+    skills: [env-setup]
+    human_gate: false
+    exit_when: worktree ready; logs/repro scripts available when needed
+    on_fail: retry
+    agent_preference: { capability: env, cost: low }
+
+  - name: clarify
+    role: Orchestrator
+    skills: [diagnose]
+    human_gate: true
+    skip_when: complete logs already capture expectation vs actual
+    exit_when: expectation vs actual recorded
+    on_fail: escalate
+    agent_preference: { capability: clarify, cost: mid }
+
+  - name: plan
+    role: Planner
+    skills: [hypothesis-loop]
+    human_gate: false
+    exit_when: hypothesis list + probe plan; experience summary injected
+    on_fail: retry
+    agent_preference: { capability: plan, cost: mid }
+
+  - name: develop
+    role: Developer
+    skills: [instrument, evidence-pack]
+    human_gate: false
+    exit_when: either a fix lands or an evidence pack supports a written conclusion
+    on_fail: retry
+    agent_preference: { capability: code, cost: mid }
+
+  - name: test
+    role: Developer
+    skills: [evidence-pack]
+    human_gate: false
+    exit_when: evidence pack complete, or regression green if a fix was made
+    on_fail: goto:develop
+    agent_preference: { capability: test, cost: low }
+
+  - name: review
+    role: Reviewer
+    skills: [review-checklist]
+    human_gate: false
+    exit_when: conclusion or fix reviewed
+    on_fail: goto:develop
+    agent_preference: { capability: review, cost: mid }
+
+  - name: open_pr
+    role: Developer
+    skills: [open-pr]
+    human_gate: false
+    skip_when: delivery is conclusion-only with no code change
+    exit_when: pr_url written, or skip noted with conclusion artifact path
+    on_fail: retry
+    agent_preference: { capability: code, cost: low }
+
+  - name: cicd
+    role: Orchestrator
+    skills: [ci-loop]
+    human_gate: false
+    skip_when: no PR opened
+    exit_when: CI green or blocked at max_ci_loops, or skipped
+    on_fail: goto:develop
+    agent_preference: { capability: classify, cost: mid }
+
+  - name: experience
+    role: Orchestrator
+    skills: [experience-write]
+    human_gate: false
+    exit_when: diagnostic path / effective probes written to shared experience root
+    on_fail: escalate
+    agent_preference: { capability: write, cost: low }

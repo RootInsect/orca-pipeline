@@ -1,0 +1,77 @@
+id: bugfix-v1
+task_types: [bug_fix]
+max_ci_loops: 2
+summary: Reproduce → root cause → minimal patch → regression → PR → CI loop → experience
+stages:
+  - name: setup_env
+    role: Orchestrator
+    skills: [env-setup]
+    human_gate: false
+    exit_when: worktree ready and env fingerprint/recipe doctor ok (or noted fallback)
+    on_fail: retry
+    agent_preference: { capability: env, cost: low }
+
+  - name: clarify
+    role: Orchestrator
+    skills: [reproduce]
+    human_gate: true
+    skip_when: stable repro steps already present
+    exit_when: repro steps or acceptance of "cannot repro yet" recorded
+    on_fail: escalate
+    agent_preference: { capability: clarify, cost: mid }
+
+  - name: plan
+    role: Planner
+    skills: [root-cause]
+    human_gate: false
+    exit_when: PlanDoc with root-cause hypotheses and minimal change surface; experience summary injected
+    on_fail: retry
+    agent_preference: { capability: plan, cost: high }
+
+  - name: develop
+    role: Developer
+    skills: [minimal-patch]
+    human_gate: false
+    exit_when: minimal patch applied; local lint/unit checks configured for the change pass
+    on_fail: retry
+    agent_preference: { capability: code, cost: mid }
+
+  - name: test
+    role: Developer
+    skills: [regression-test]
+    human_gate: false
+    exit_when: regression covering the repro path is green
+    on_fail: goto:develop
+    agent_preference: { capability: test, cost: low }
+
+  - name: review
+    role: Reviewer
+    skills: [review-checklist]
+    human_gate: false
+    exit_when: review verdict approve (prefer agent account ≠ develop)
+    on_fail: goto:develop
+    agent_preference: { capability: review, cost: mid }
+
+  - name: open_pr
+    role: Developer
+    skills: [open-pr]
+    human_gate: false
+    exit_when: pr_url written on task state
+    on_fail: retry
+    agent_preference: { capability: code, cost: low }
+
+  - name: cicd
+    role: Orchestrator
+    skills: [ci-loop]
+    human_gate: false
+    exit_when: CI green, or ci_loops >= max_ci_loops then blocked
+    on_fail: goto:develop
+    agent_preference: { capability: classify, cost: mid }
+
+  - name: experience
+    role: Orchestrator
+    skills: [experience-write]
+    human_gate: false
+    exit_when: project (and optional domain) note written under shared experience root + index.jsonl
+    on_fail: escalate
+    agent_preference: { capability: write, cost: low }
